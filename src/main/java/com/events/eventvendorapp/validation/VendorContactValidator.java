@@ -1,6 +1,6 @@
 package com.events.eventvendorapp.validation;
 
-import com.events.eventvendorapp.model.Vendor;
+import com.events.eventvendorapp.model.vendor.Vendor;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

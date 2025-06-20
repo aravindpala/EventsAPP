@@ -18,8 +18,8 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
 
-    @Value("${jwt.secret}")
-    private String secret;
+   // @Value("${jwt.secret}")
+    private SecretKey secret = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @Value("${jwt.expirationMs}")
     private Long jwtExpirationInMs;
@@ -31,7 +31,7 @@ public class JwtTokenUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        SecretKey key = Keys.hmacShaKeyFor(secret.getEncoded());
 
         return Jwts.builder()
                 .setClaims(claims)

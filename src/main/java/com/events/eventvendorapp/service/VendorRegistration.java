@@ -1,20 +1,21 @@
 package com.events.eventvendorapp.service;
 
 
-import com.events.eventvendorapp.model.Vendor;
-import com.events.eventvendorapp.repository.VendorRepository;
+import com.events.eventvendorapp.dto.vendor.BusinessDetailsDTO;
+import com.events.eventvendorapp.model.vendor.Vendor;
+import com.events.eventvendorapp.repository.vendor.VendorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Random;
 
 @Service
-public class VendorService {
+public class VendorRegistration {
 
     private final VendorRepository vendorRepository;
     private final Random random = new Random();
 
-    public VendorService(VendorRepository vendorRepository) {
+    public VendorRegistration(VendorRepository vendorRepository) {
         this.vendorRepository = vendorRepository;
     }
 
@@ -63,6 +64,22 @@ public class VendorService {
         return true;
     }
 
+    public void updateVendorToken(String vendorId, String token) {
+        var vendorOpt = vendorRepository.findById(vendorId);
+        if (vendorOpt.isEmpty()) {
+            throw new IllegalArgumentException("Vendor not found");
+        }
+
+        Vendor existingVendor = vendorOpt.get();
+        existingVendor.setToken(token);
+        vendorRepository.save(existingVendor);
+    }
+
+
+
+
+
+
     public boolean verifyMobileOtp(String vendorId, String otp) {
         var vendorOpt = vendorRepository.findById(vendorId);
         if (vendorOpt.isEmpty()) return false;
@@ -77,6 +94,20 @@ public class VendorService {
         vendor.setMobileOtpExpiry(0);
         vendorRepository.save(vendor);
         return true;
+    }
+
+    public void addVendorBusinessDetails(BusinessDetailsDTO businessDetailsDTO){
+        var vendorOpt = vendorRepository.findById(businessDetailsDTO.getVendorId());
+        if(vendorOpt.isEmpty()) throw new IllegalArgumentException("Vendor Not Found");
+        Vendor vendor = vendorOpt.get();
+        vendor.setBusinessName(businessDetailsDTO.getBusinessName());
+        vendor.setOwnerName(businessDetailsDTO.getOwnerName());
+        vendor.setExperienceYears(businessDetailsDTO.getExperienceYears());
+        vendor.setBusinessType(businessDetailsDTO.getBusinessType());
+        vendor.setDescription(businessDetailsDTO.getDescription());
+        vendor.setWebsiteURL(businessDetailsDTO.getWebsiteURL());
+        vendor.setLocations(businessDetailsDTO.getLocations());
+        vendorRepository.save(vendor);
     }
 }
 

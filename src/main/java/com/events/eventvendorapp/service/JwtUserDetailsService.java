@@ -1,8 +1,8 @@
 package com.events.eventvendorapp.service;
 
 
-import com.events.eventvendorapp.model.Vendor;
-import com.events.eventvendorapp.repository.VendorRepository;
+import com.events.eventvendorapp.model.vendor.Vendor;
+import com.events.eventvendorapp.repository.vendor.VendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +24,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return new User(
-                vendor.getEmail() != null ? vendor.getEmail() : vendor.getMobileNumber(),
+                vendor.getId(),
                 "",  // password is not used
                 Collections.emptyList()
         );
